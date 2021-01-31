@@ -75,7 +75,30 @@ class Win10MinecraftApp:
         self.minecraft['size'][0] + screen_grab_size_offset[0],
         self.minecraft['size'][1] + screen_grab_size_offset[1]))
         screen_shot = screen_shot.convert('L').convert('RGB')
-        screen_shot.show()
+        return screen_shot
+
+    def get_screen_and_keys(self):
+        screen_shot = pyautogui.screenshot(region=(
+        self.minecraft['location'][0] + screen_grab_location_offset[0],
+        self.minecraft['location'][1] + screen_grab_location_offset[1],
+        self.minecraft['size'][0] + screen_grab_size_offset[0],
+        self.minecraft['size'][1] + screen_grab_size_offset[1]))
+        screen_shot = screen_shot.convert('L').convert('RGB')
+
+        keys_down = []
+        keys_to_get = ['w', 'left', 'right', 'space']
+        for key in keys_to_get:
+            keys_down.append({key: keyboard.is_pressed(key)})
+
+        return screen_shot, keys_down
+
+    def get_keys(self):
+        keys_down = []
+        keys_to_get = ['w', 'left', 'right', 'space']
+        for key in keys_to_get:
+            keys_down.append({key: keyboard.is_pressed(key)})
+
+        return keys_down
 
         
 
