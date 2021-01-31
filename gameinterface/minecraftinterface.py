@@ -27,6 +27,9 @@ class Win10MinecraftApp:
             raise Exception("Windows 10 Minecraft found to not be running,"
                             "Make sure Windows 10 Minecraft is running and "
                             "your world is loaded")
+        else:
+            win32gui.MoveWindow(self.minecraft['app'][0], 600, 480, 0, 0, True)
+
 
 
 
