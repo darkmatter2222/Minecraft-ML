@@ -3,8 +3,7 @@ import zipfile
 from tensorflow.keras import layers
 from tensorflow.keras import Model
 import tensorflow as tf
-
-
+from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 save_root = 'n:\\minecraft-ml\\training'
@@ -37,10 +36,8 @@ validation_generator = image_generator.flow_from_directory(
         subset="training",
         class_mode='categorical')
 
-test1, test2 = train_generator.next()
+#test1, test2 = train_generator.next()
 
-# Our input feature map is 200x200x3: 200x200 for the image pixels, and 3 for
-# the three color channels: R, G, and B
 model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(640, 480, 3)),
     tf.keras.layers.Conv2D(16, 3, activation='relu'),
@@ -50,24 +47,19 @@ model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(64, 3, activation='relu'),
     tf.keras.layers.MaxPooling2D(2),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(256, activation=tf.nn.sigmoid),
+    tf.keras.layers.Dense(512, activation='relu'),
     tf.keras.layers.Dropout(0.1),
     tf.keras.layers.Dense(4, activation=tf.nn.sigmoid)
 ])
-
-model.summary()
-
-from tensorflow.keras.optimizers import RMSprop
 
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(lr=0.001),
               metrics=['accuracy'])
 
-
 history = model.fit(
       train_generator,
       steps_per_epoch=train_generator.samples/train_generator.batch_size,
-      epochs=1,
+      epochs=2,
       validation_data=validation_generator,
       validation_steps=validation_generator.samples/validation_generator.batch_size,
       verbose=1)
