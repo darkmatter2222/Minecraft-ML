@@ -73,7 +73,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 
-history = model.fit_generator(
+history = model.fit(
       train_generator,
       steps_per_epoch=100,  # 2000 images = batch_size * steps
       epochs=1,
