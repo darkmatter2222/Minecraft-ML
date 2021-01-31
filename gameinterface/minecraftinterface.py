@@ -4,7 +4,6 @@ import time
 import pyautogui
 from PIL import Image
 
-
 target_size = (640, 480)
 target_location = (0, 0)
 screen_grab_location_offset = (11, 65)
@@ -64,33 +63,21 @@ class Win10MinecraftApp:
                 keyboard.release(key_instruction['key'])
             else:
                 raise Exception("Invalid Instruction to act upon")
-            
+
     def is_pressed(self, key):
         return keyboard.is_pressed(key)
 
     def get_screen(self):
         screen_shot = pyautogui.screenshot(region=(
-        self.minecraft['location'][0] + screen_grab_location_offset[0],
-        self.minecraft['location'][1] + screen_grab_location_offset[1],
-        self.minecraft['size'][0] + screen_grab_size_offset[0],
-        self.minecraft['size'][1] + screen_grab_size_offset[1]))
+            self.minecraft['location'][0] + screen_grab_location_offset[0],
+            self.minecraft['location'][1] + screen_grab_location_offset[1],
+            self.minecraft['size'][0] + screen_grab_size_offset[0],
+            self.minecraft['size'][1] + screen_grab_size_offset[1]))
         screen_shot = screen_shot.convert('L').convert('RGB')
         return screen_shot
 
     def get_screen_and_keys(self):
-        screen_shot = pyautogui.screenshot(region=(
-        self.minecraft['location'][0] + screen_grab_location_offset[0],
-        self.minecraft['location'][1] + screen_grab_location_offset[1],
-        self.minecraft['size'][0] + screen_grab_size_offset[0],
-        self.minecraft['size'][1] + screen_grab_size_offset[1]))
-        screen_shot = screen_shot.convert('L').convert('RGB')
-
-        keys_down = []
-        keys_to_get = ['w', 'left', 'right', 'space']
-        for key in keys_to_get:
-            keys_down.append({key: keyboard.is_pressed(key)})
-
-        return screen_shot, keys_down
+        return self.get_screen(), self.get_keys()
 
     def get_keys(self):
         keys_down = []
@@ -99,13 +86,3 @@ class Win10MinecraftApp:
             keys_down.append({key: keyboard.is_pressed(key)})
 
         return keys_down
-
-        
-
-
-
-
-
-
-
-
