@@ -7,8 +7,8 @@ from PIL import Image
 
 target_size = (640, 480)
 target_location = (0, 0)
-screen_grab_location_offset = (8, 0)
-screen_grab_size_offset = (-16, -8)
+screen_grab_location_offset = (11, 65)
+screen_grab_size_offset = (-24, -77)
 
 
 def window_enumeration_handler(hwnd, top_windows):
@@ -73,9 +73,10 @@ class Win10MinecraftApp:
         self.minecraft['location'][0] + screen_grab_location_offset[0],
         self.minecraft['location'][1] + screen_grab_location_offset[1],
         self.minecraft['size'][0] + screen_grab_size_offset[0],
-        self.minecraft['size'][1] + screen_grab_size_offset[1])).convert('L').convert('RGB')
+        self.minecraft['size'][1] + screen_grab_size_offset[1]))
+        screen_shot = screen_shot.convert('L').convert('RGB')
+        screen_shot.show()
 
-            
         
 
 
