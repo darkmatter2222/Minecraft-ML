@@ -5,7 +5,7 @@ import uuid
 
 mci = minecraftinterface.Win10MinecraftApp()
 
-save_root = 'n:\\minecraft-ml\\training'
+save_root = 'n:\\minecraft-ml\\training2'
 space_root = f'{save_root}\\space'
 left_root = f'{save_root}\\left'
 right_root = f'{save_root}\\right'
@@ -35,7 +35,7 @@ while True:
     elif {'right': True} in keys:
         screen.save(f'{right_root}\\{uuid.uuid1()}.png')
     else:
-        if random.random() > 0.5:
+        if random.random() < 0.1:
             screen.save(f'{none_root}\\{uuid.uuid1()}.png')
 
 

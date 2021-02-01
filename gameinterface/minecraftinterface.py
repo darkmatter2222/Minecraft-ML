@@ -73,7 +73,7 @@ class Win10MinecraftApp:
             self.minecraft['location'][1] + screen_grab_location_offset[1],
             self.minecraft['size'][0] + screen_grab_size_offset[0],
             self.minecraft['size'][1] + screen_grab_size_offset[1]))
-        screen_shot = screen_shot.convert('L').convert('RGB')
+        #screen_shot = screen_shot.convert('L').convert('RGB')
         return screen_shot
 
     def get_screen_and_keys(self):

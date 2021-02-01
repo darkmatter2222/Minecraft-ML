@@ -22,7 +22,7 @@ image_generator = ImageDataGenerator(rescale=1./255, validation_split=0.2)
 
 train_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(640, 480),
+        target_size=(320, 240),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -30,7 +30,7 @@ train_generator = image_generator.flow_from_directory(
 
 validation_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(640, 480),
+        target_size=(320, 240),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -39,7 +39,7 @@ validation_generator = image_generator.flow_from_directory(
 #test1, test2 = train_generator.next()
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(640, 480, 3)),
+    tf.keras.layers.Input(shape=(320, 240, 3)),
     tf.keras.layers.Conv2D(16, 3, activation='relu'),
     tf.keras.layers.MaxPooling2D(2),
     tf.keras.layers.Conv2D(32, 3, activation='relu'),
@@ -53,7 +53,7 @@ model = tf.keras.Sequential([
 ])
 
 model.compile(loss='categorical_crossentropy',
-              optimizer='adamgit add',
+              optimizer='adam',
               metrics=['accuracy'])
 
 history = model.fit(

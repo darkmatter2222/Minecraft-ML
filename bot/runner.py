@@ -1,5 +1,6 @@
 from gameinterface import minecraftinterface
 import tensorflow as tf
+import keyboard
 from PIL import Image
 import numpy as np
 
@@ -12,10 +13,21 @@ model = tf.keras.models.load_model(f'{model_root}\\MCModel1.h5')
 while True:
     screen = mci.get_screen()
 
-    screen = screen.resize((640,480))
+    screen = screen.resize((320, 240))
 
     screen = np.array(screen) / 225
 
     result = model.predict(np.array([screen]))
 
-    print(result)
+    actions = ['left', 'none', 'right', 'space']
+
+    directives = {'left': 'k', 'right': 'l', 'space': 'space', 'none': 'DONOTHING'}
+
+    action = actions[np.argmax(result)]
+
+    key = directives[action]
+    if keyboard.is_pressed('ctrl'):
+        if not key == 'DONOTHING':
+            mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
+
+    print(np.argmax(result))
