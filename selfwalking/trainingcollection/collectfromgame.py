@@ -1,11 +1,11 @@
-from gameinterface import minecraftinterface
+from selfwalking.gameinterface import minecraftinterface
 import os
 import random
 import uuid
 
 mci = minecraftinterface.Win10MinecraftApp()
 
-save_root = 'n:\\minecraft-ml\\training2'
+save_root = 'n:\\minecraft-ml\\training'
 space_root = f'{save_root}\\space'
 left_root = f'{save_root}\\left'
 right_root = f'{save_root}\\right'
@@ -30,9 +30,9 @@ while True:
 
     if {'space': True} in keys:
         screen.save(f'{space_root}\\{uuid.uuid1()}.png')
-    elif {'left': True} in keys:
+    elif {'k': True} in keys:
         screen.save(f'{left_root}\\{uuid.uuid1()}.png')
-    elif {'right': True} in keys:
+    elif {'l': True} in keys:
         screen.save(f'{right_root}\\{uuid.uuid1()}.png')
     else:
         if random.random() < 0.1:

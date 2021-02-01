@@ -1,4 +1,4 @@
-from gameinterface import minecraftinterface
+from selfwalking.gameinterface import minecraftinterface
 
 mci = minecraftinterface.Win10MinecraftApp()
 for x in range(0, 1000):

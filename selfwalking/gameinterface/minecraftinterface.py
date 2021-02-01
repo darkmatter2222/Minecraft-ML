@@ -81,7 +81,7 @@ class Win10MinecraftApp:
 
     def get_keys(self):
         keys_down = []
-        keys_to_get = ['w', 'left', 'right', 'space']
+        keys_to_get = ['w', 'k', 'l', 'space']
         for key in keys_to_get:
             keys_down.append({key: keyboard.is_pressed(key)})
 

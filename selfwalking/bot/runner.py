@@ -1,7 +1,6 @@
-from gameinterface import minecraftinterface
+from selfwalking.gameinterface import minecraftinterface
 import tensorflow as tf
 import keyboard
-from PIL import Image
 import numpy as np
 
 mci = minecraftinterface.Win10MinecraftApp()
