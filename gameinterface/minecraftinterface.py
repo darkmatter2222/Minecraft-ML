@@ -9,6 +9,7 @@ target_size = (640, 480)
 target_location = (0, 0)
 screen_grab_location_offset = (9, 34)
 screen_grab_size_offset = (-9, -7)
+default_region = (9, 34, 631, 473)
 
 
 def window_enumeration_handler(hwnd, top_windows):
@@ -26,6 +27,10 @@ def window_enumeration_handler(hwnd, top_windows):
 class Win10MinecraftApp:
     def __init__(self):
         self.d = d3dshot.create(frame_buffer_size=100, capture_output="numpy")
+        self.d.capture(region=default_region)
+
+
+    def move_mc(self):
         self.top_windows = []
         self.minecraft = []
         win32gui.EnumWindows(window_enumeration_handler, self.top_windows)
@@ -35,25 +40,29 @@ class Win10MinecraftApp:
                 break
 
         if not self.minecraft:
-            raise Exception("Windows 10 Minecraft found to not be running,"
-                            "Make sure Windows 10 Minecraft is running and "
-                            "your world is loaded")
-        else:
-            win32gui.MoveWindow(self.minecraft['app'][0], target_location[0], target_location[1],
-                                target_size[0], target_size[1], True)
-            x0, y0, x1, y1 = win32gui.GetWindowRect(self.minecraft['app'][0])
-            w = x1 - x0  # width
-            h = y1 - y0  # height
-            self.minecraft['location'] = (x0, y0)
-            self.minecraft['size'] = (w, h)
-            win32gui.SetForegroundWindow(self.minecraft['app'][0])
-            self.d.capture( region=(
-                self.minecraft['location'][0] + screen_grab_location_offset[0],
-                self.minecraft['location'][1] + screen_grab_location_offset[1],
-                self.minecraft['size'][0] + screen_grab_size_offset[0],
-                self.minecraft['size'][1] + screen_grab_size_offset[1]))
+            lol = 1
+            # raise Exception("Windows 10 Minecraft found to not be running,"
+            # "Make sure Windows 10 Minecraft is running and "
+            # "your world is loaded")
+
+        win32gui.MoveWindow(self.minecraft['app'][0], target_location[0], target_location[1],
+                            target_size[0], target_size[1], True)
+        x0, y0, x1, y1 = win32gui.GetWindowRect(self.minecraft['app'][0])
+        w = x1 - x0  # width
+        h = y1 - y0  # height
+        self.minecraft['location'] = (x0, y0)
+        self.minecraft['size'] = (w, h)
+        win32gui.SetForegroundWindow(self.minecraft['app'][0])
+        region = (
+            self.minecraft['location'][0] + screen_grab_location_offset[0],
+            self.minecraft['location'][1] + screen_grab_location_offset[1],
+            self.minecraft['size'][0] + screen_grab_size_offset[0],
+            self.minecraft['size'][1] + screen_grab_size_offset[1])
+        print(region)
+        #self.d.capture( region=region)
 
         print(f"Minecraft Windows 10 Found, Loc:{self.minecraft['size']}")
+
 
     def send_keystroke(self, key_instructions):
         if not isinstance(key_instructions, list):
@@ -77,14 +86,17 @@ class Win10MinecraftApp:
     def get_screen(self):
         return self.d.get_latest_frame()
 
-    def get_screen(self, count):
-        if len(self.d.frame_buffer) > count:
-            return self.d.get_frame_stack(tuple(range(0, count)), stack_dimension="last")
+    def get_screen(self, frame_count):
+        if len(self.d.frame_buffer) > frame_count:
+            return self.d.get_frame_stack(tuple(range(0, frame_count)), stack_dimension="last")
         else:
             return None
 
     def get_screen_and_keys(self):
         return self.get_screen(), self.get_keys()
+
+    def get_screen_and_keys(self, frame_count):
+        return self.get_screen(frame_count=frame_count), self.get_keys()
 
     def get_keys(self):
         keys_down = []
