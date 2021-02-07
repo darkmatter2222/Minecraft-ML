@@ -7,8 +7,8 @@ from PIL import Image
 
 target_size = (640, 480)
 target_location = (0, 0)
-screen_grab_location_offset = (11, 65)
-screen_grab_size_offset = (-24, -77)
+screen_grab_location_offset = (9, 34)
+screen_grab_size_offset = (-9, -7)
 
 
 def window_enumeration_handler(hwnd, top_windows):
@@ -76,6 +76,12 @@ class Win10MinecraftApp:
 
     def get_screen(self):
         return self.d.get_latest_frame()
+
+    def get_screen(self, count):
+        if len(self.d.frame_buffer) > count:
+            return self.d.get_frame_stack(tuple(range(0, count)), stack_dimension="last")
+        else:
+            return None
 
     def get_screen_and_keys(self):
         return self.get_screen(), self.get_keys()
