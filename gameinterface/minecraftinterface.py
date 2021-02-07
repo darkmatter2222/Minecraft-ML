@@ -2,6 +2,7 @@ import win32gui
 import keyboard
 import time
 import pyautogui
+import d3dshot
 from PIL import Image
 
 target_size = (640, 480)
@@ -24,6 +25,7 @@ def window_enumeration_handler(hwnd, top_windows):
 
 class Win10MinecraftApp:
     def __init__(self):
+        self.d = d3dshot.create(frame_buffer_size=100, capture_output="numpy")
         self.top_windows = []
         self.minecraft = []
         win32gui.EnumWindows(window_enumeration_handler, self.top_windows)
@@ -45,6 +47,11 @@ class Win10MinecraftApp:
             self.minecraft['location'] = (x0, y0)
             self.minecraft['size'] = (w, h)
             win32gui.SetForegroundWindow(self.minecraft['app'][0])
+            self.d.capture( region=(
+                self.minecraft['location'][0] + screen_grab_location_offset[0],
+                self.minecraft['location'][1] + screen_grab_location_offset[1],
+                self.minecraft['size'][0] + screen_grab_size_offset[0],
+                self.minecraft['size'][1] + screen_grab_size_offset[1]))
 
         print(f"Minecraft Windows 10 Found, Loc:{self.minecraft['size']}")
 
@@ -68,13 +75,7 @@ class Win10MinecraftApp:
         return keyboard.is_pressed(key)
 
     def get_screen(self):
-        screen_shot = pyautogui.screenshot(region=(
-            self.minecraft['location'][0] + screen_grab_location_offset[0],
-            self.minecraft['location'][1] + screen_grab_location_offset[1],
-            self.minecraft['size'][0] + screen_grab_size_offset[0],
-            self.minecraft['size'][1] + screen_grab_size_offset[1]))
-        #screen_shot = screen_shot.convert('L').convert('RGB')
-        return screen_shot
+        return self.d.get_latest_frame()
 
     def get_screen_and_keys(self):
         return self.get_screen(), self.get_keys()
