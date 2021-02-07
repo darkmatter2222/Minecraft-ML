@@ -48,6 +48,7 @@ while True:
         if not key == 'none':
             mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
 
-    if
+    if keyboard.is_pressed('m'):
+        mci.move_mc()
 
     print(np.argmax(result))
