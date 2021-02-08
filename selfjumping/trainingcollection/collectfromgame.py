@@ -5,7 +5,7 @@ import random
 import uuid
 
 mci = minecraftinterface.Win10MinecraftApp()
-
+mci.move_mc()
 save_root = 'n:\\minecraft-ml\\selfjumping\\training'
 space_root = f'{save_root}\\space'
 none_root = f'{save_root}\\none'
@@ -28,6 +28,7 @@ while True:
         continue
 
     np_image = imageprocessing.concat_images(np_images=np_images)
+    np_image = imageprocessing.scale_down_image(np_image=np_image)
     pil_image = imageprocessing.array_to_image(np_image=np_image)
 
     if not {'w': True} in keys:

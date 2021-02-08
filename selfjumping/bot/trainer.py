@@ -6,6 +6,7 @@ import tensorflow as tf
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import json
+import kerastuner as kt
 
 save_root = 'n:\\minecraft-ml\\selfjumping\\training'
 model_root = 'n:\\minecraft-ml\\selfjumping\\models'
@@ -36,34 +37,50 @@ validation_generator = image_generator.flow_from_directory(
         subset="training",
         class_mode='categorical')
 
-#test1, test2 = train_generator.next()
 
-model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(622, 2195, 3)),
-    tf.keras.layers.Conv2D(16, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(2),
-    tf.keras.layers.Conv2D(32, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(2),
-    tf.keras.layers.Conv2D(64, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(2),
-    tf.keras.layers.Conv2D(128, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(2),
-    tf.keras.layers.Conv2D(256, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(2),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dropout(0.1),
-    tf.keras.layers.Dense(2, activation=tf.nn.sigmoid)
-])
+def model_builder(hp):
+    this_model = tf.keras.Sequential()
+    this_model.add(tf.keras.layers.Input(shape=(155, 548, 3)))
+    conv_layers = hp.Int('conv_layers', min_value=1, max_value=4, step=1)
+    for index in range(conv_layers):
+        tf.keras.layers.Conv2D(16 * (index + 1), 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(2),
 
-model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
-              metrics=['accuracy'])
+    this_model.add(tf.keras.layers.Flatten())
+
+    dense_layer_one = hp.Int('dense_layer_one', min_value=2, max_value=512, step=2)
+    this_model.add(tf.keras.layers.Dense(units=dense_layer_one, activation='relu'))
+
+    this_model.add(tf.keras.layers.Dense(2, activation=tf.nn.sigmoid))
+
+    hp_learning_rate = hp.Choice('learning_rate', values=[1e-1, 1e-2, 1e-3, 1e-4])
+
+    this_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=hp_learning_rate),
+                       loss='categorical_crossentropy',
+                       metrics=['accuracy'])
+
+    return this_model
+
 
 classes = train_generator.class_indices
 with open(f"{model_root}\\Classes.json", 'w') as outfile:
     json.dump(classes, outfile)
 print(classes)
+
+tuner = kt.Hyperband(model_builder,
+                     objective='val_loss',
+                     max_epochs=10,
+                     factor=2,
+                     directory='my_dir',
+                     project_name='intro_to_kt9')
+
+tuner.search(train_generator,
+             epochs=50,
+             validation_data=validation_generator)
+
+best_hps = tuner.get_best_hyperparameters(num_trials=100)[0]
+
+model = tuner.hypermodel.build(best_hps)
 
 history = model.fit(
       train_generator,
