@@ -31,14 +31,15 @@ for this_class in orig_classes:
 
 
 while True:
-    np_images = mci.get_screen(frame_count=5)
+    np_images = mci.get_screen(frame_count=2)
 
     if np_images is None:
-        np_image = np.zeros([622, 2195, 3])
+        np_image = np.zeros([155, 219, 3])
     else:
         np_image = imageprocessing.concat_images(np_images=np_images)
+        np_image = imageprocessing.scale_down_image(np_image=np_image)
 
-    np_image = imageprocessing.scale_down_image(np_image=np_image)
+
 
     np_image = np.array(np_image) / 225
 
@@ -52,7 +53,7 @@ while True:
 
     if keyboard.is_pressed('ctrl'):
         if not key == 'none':
-            if result[0][index] > .015:
+            if result[0][index] > .1:
                 mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
 
     if keyboard.is_pressed('m'):

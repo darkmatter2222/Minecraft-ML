@@ -72,7 +72,7 @@ tuner = kt.Hyperband(model_builder,
                      max_epochs=10,
                      factor=2,
                      directory=f'{model_root}\\KT',
-                     project_name='intro_to_kt9')
+                     project_name='intro_to_kt1')
 
 tuner.search(train_generator,
              epochs=50,
