@@ -38,17 +38,23 @@ while True:
     else:
         np_image = imageprocessing.concat_images(np_images=np_images)
 
+    np_image = imageprocessing.scale_down_image(np_image=np_image)
+
     np_image = np.array(np_image) / 225
 
     result = model.predict(np.array([np_image]))
 
-    key = classes[np.argmax(result)]
+    index = np.argmax(result)
+
+    key = classes[index]
 
     if keyboard.is_pressed('ctrl'):
         if not key == 'none':
-            mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
+            if result[0][index] > .04:
+                mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
 
     if keyboard.is_pressed('m'):
         mci.move_mc()
 
-    print(np.argmax(result))
+
+    print(result[0])

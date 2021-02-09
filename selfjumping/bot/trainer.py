@@ -23,7 +23,7 @@ image_generator = ImageDataGenerator(rescale=1./255, validation_split=0.2)
 
 train_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(622, 2195),
+        target_size=(155, 548),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -31,7 +31,7 @@ train_generator = image_generator.flow_from_directory(
 
 validation_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(622, 2195),
+        target_size=(155, 548),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -43,12 +43,12 @@ def model_builder(hp):
     this_model.add(tf.keras.layers.Input(shape=(155, 548, 3)))
     conv_layers = hp.Int('conv_layers', min_value=1, max_value=4, step=1)
     for index in range(conv_layers):
-        tf.keras.layers.Conv2D(16 * (index + 1), 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(2),
+        this_model.add(tf.keras.layers.Conv2D(16 * (index + 1), 3, activation='relu'))
+        this_model.add(tf.keras.layers.MaxPooling2D(2))
 
     this_model.add(tf.keras.layers.Flatten())
 
-    dense_layer_one = hp.Int('dense_layer_one', min_value=2, max_value=512, step=2)
+    dense_layer_one = hp.Int('dense_layer_one', min_value=64, max_value=512, step=2)
     this_model.add(tf.keras.layers.Dense(units=dense_layer_one, activation='relu'))
 
     this_model.add(tf.keras.layers.Dense(2, activation=tf.nn.sigmoid))

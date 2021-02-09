@@ -38,7 +38,7 @@ while True:
         pil_image.save(f'{space_root}\\{uuid.uuid1()}.png')
         print(f"Image Saved Ittr:{count}")
     else:
-        if random.random() < 0.1:
+        if random.random() < 0.5:
             pil_image.save(f'{none_root}\\{uuid.uuid1()}.png')
             print(f"Image Saved Ittr:{count}")
 
