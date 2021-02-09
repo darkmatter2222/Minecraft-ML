@@ -22,13 +22,14 @@ make_dir(none_root)
 
 count = 0
 while True:
-    np_images, keys = mci.get_screen_and_keys(frame_count=5)
+    np_images, keys = mci.get_screen_and_keys(frame_count=2)
 
     if np_images is None:
         continue
 
     np_image = imageprocessing.concat_images(np_images=np_images)
     np_image = imageprocessing.scale_down_image(np_image=np_image)
+    imageprocessing.render_image(np_image)
     pil_image = imageprocessing.array_to_image(np_image=np_image)
 
     if not {'w': True} in keys:
@@ -38,7 +39,7 @@ while True:
         pil_image.save(f'{space_root}\\{uuid.uuid1()}.png')
         print(f"Image Saved Ittr:{count}")
     else:
-        if random.random() < 0.5:
+        if random.random() < 0.1:
             pil_image.save(f'{none_root}\\{uuid.uuid1()}.png')
             print(f"Image Saved Ittr:{count}")
 

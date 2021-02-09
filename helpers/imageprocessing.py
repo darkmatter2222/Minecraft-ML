@@ -22,3 +22,9 @@ def scale_down_image(np_image):
 
 def array_to_image(np_image):
     return Image.fromarray(np_image)
+
+
+def render_image(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    cv2.imshow('Python Screen Grab', image)
+    cv2.waitKey(1)

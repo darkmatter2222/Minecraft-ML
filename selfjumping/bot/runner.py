@@ -42,6 +42,8 @@ while True:
 
     np_image = np.array(np_image) / 225
 
+
+
     result = model.predict(np.array([np_image]))
 
     index = np.argmax(result)
@@ -50,7 +52,7 @@ while True:
 
     if keyboard.is_pressed('ctrl'):
         if not key == 'none':
-            if result[0][index] > .04:
+            if result[0][index] > .015:
                 mci.send_keystroke([{'action': 'press_and_release', 'key': key}])
 
     if keyboard.is_pressed('m'):

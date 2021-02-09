@@ -23,7 +23,7 @@ image_generator = ImageDataGenerator(rescale=1./255, validation_split=0.2)
 
 train_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(155, 548),
+        target_size=(155, 219),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -31,7 +31,7 @@ train_generator = image_generator.flow_from_directory(
 
 validation_generator = image_generator.flow_from_directory(
         save_root,
-        target_size=(155, 548),
+        target_size=(155, 219),
         batch_size=10,
         shuffle=True,
         subset="training",
@@ -40,7 +40,7 @@ validation_generator = image_generator.flow_from_directory(
 
 def model_builder(hp):
     this_model = tf.keras.Sequential()
-    this_model.add(tf.keras.layers.Input(shape=(155, 548, 3)))
+    this_model.add(tf.keras.layers.Input(shape=(155, 219, 3)))
     conv_layers = hp.Int('conv_layers', min_value=1, max_value=4, step=1)
     for index in range(conv_layers):
         this_model.add(tf.keras.layers.Conv2D(16 * (index + 1), 3, activation='relu'))
@@ -71,7 +71,7 @@ tuner = kt.Hyperband(model_builder,
                      objective='val_loss',
                      max_epochs=10,
                      factor=2,
-                     directory='my_dir',
+                     directory=f'{model_root}\\KT',
                      project_name='intro_to_kt9')
 
 tuner.search(train_generator,
