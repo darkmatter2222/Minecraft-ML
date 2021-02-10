@@ -16,6 +16,7 @@ Starting with a playground:
   * I write mine to an external 1TB SSD (Type C) for "Disposable Flash Memory" as to not ruin my native SSDs  
 * One you have ~1GB of "No Action" and "Jumping" images, you are ready to train.  
 * Note: For Temoral understadning, I collected and stacked a 2 frame historcal reference, this gives the model temporal understanding as the what your trajectory is. Adding a 2nd frame increases your min data training reqquirement nearly exponentially.  
+* ![trainingdata](https://github.com/darkmatter2222/Minecraft-ML/blob/main/selfjumping/images/Jump.gif)![trainingdata2](https://github.com/darkmatter2222/Minecraft-ML/blob/main/selfjumping/images/NoAction.gif)  
 
 
 [keras-tuner](https://github.com/keras-team/keras-tuner) suggests that when we play 
